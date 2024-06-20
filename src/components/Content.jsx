@@ -10,7 +10,8 @@ function Content(){
             <div className="box right">
                 
                 <button class="custom-btn btn">Start Live Data Capture</button>
-                <button class="custom-btn btn">Custom Check</button>
+                <button class="custom-btn btn">Enter own data values</button>
+                <button class="custom-btn btn">view logs</button>
             </div>
         </div>
     )

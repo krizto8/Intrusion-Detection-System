@@ -1,19 +1,18 @@
 import React from "react";
-import Navbar from "./components/Navbar.jsx";
-import Background from "./components/Background.jsx";
-import Content from "./components/Content.jsx";
-import Footer from "./components/footer.jsx";
+import Home from "./components/Home";
+import VideoBg from "./assets/net4.mp4";
 
 import "./App.css";
 
 function App() {
   return(
-  <div>
+  <div >
     
-    <Background />;
-    <Navbar />;
-    <Content />
-    <Footer />
+    <div id="background">
+    <video src={VideoBg} autoPlay muted loop id="background-video" style={{opacity:'20%'}} />
+    </div>
+    
+    <Home />
 
   </div>
   )
