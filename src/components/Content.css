@@ -1,14 +1,16 @@
 .container {
     height:80vh ;
     display: flex;
-    margin-left: 55px;
-    justify-content: center;
+    /* margin-left: 55px; */
+    justify-content: space-between;
     align-items: center;
+
+    min-width:100vw;;
+
 
 }
 
 .left {
-    width:50vw;
     align-items: center;
     font-family: Orbitron, sans-serif;
     color:  #0d1a26;
@@ -16,14 +18,22 @@
     font-size: 4em;
     font-weight: 900;
     margin-left:0px;
-    flex-grow: 1;
-
+}  
+#name {
+  display: inline-block;
+  width:50%;
+  margin-left:50px;
 }
+
+
 .right {
-    width:50vw;
+    
     font-family: Orbitron, sans-serif;
     display: flex;
     flex-direction: column;
+    margin-right: 300px;;
+    
+    
 }
 
 
