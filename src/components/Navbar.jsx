@@ -44,9 +44,12 @@ function Navbar() {
       <div className="container-fluid">
         {/* <!-- Navbar brand --> */}
         <span className="ip" >IP : {ipAddress} <img src={countryFlag} alt="Country Flag" style={{ width: '30px', height: '20px', marginBottom:'6px' }}/></span>
+        <div className="buttons">
+          <button className="custom-btn1 btn-3"><span>ABOUT THE MODEL</span></button>
+          <button className="custom-btn1 btn-3"><span>TYPES OF ATTACKS</span></button>
+          <button className="custom-btn1 btn-3"><span><img src={imgURL} style={{height:'25px', width:'25px'}}/> PROFILE</span></button>
+        </div>
         
-        <button className="custom-btn1 btn-3"><span>ABOUT THE MODEL</span></button>
-        <button className="custom-btn1 btn-3"><span><img src={imgURL} style={{height:'25px', width:'25px'}}/> PROFILE</span></button>
       </div>
       
       {/* <!-- Container wrapper --> */}

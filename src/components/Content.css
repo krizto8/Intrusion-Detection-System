@@ -29,9 +29,10 @@
 .right {
     
     font-family: Orbitron, sans-serif;
+    font-weight: 800px;
     display: flex;
     flex-direction: column;
-    margin-right: 300px;;
+    margin-right: 300px;
     
     
 }
