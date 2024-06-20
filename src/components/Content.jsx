@@ -8,6 +8,7 @@ function Content(){
                 <span id="name">NETWORK ANALYSIS & INTRUSION DETECTION SYSTEM</span>
             </div>
             <div className="box right">
+                
                 <button class="custom-btn btn">Start Live Data Capture</button>
                 <button class="custom-btn btn">Custom Check</button>
             </div>

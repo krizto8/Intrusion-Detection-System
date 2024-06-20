@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Navbar.css";
+import imgURL from "../assets/profile.png";
 
 function Navbar() {
   const [ipAddress, setIpAddress] = useState('');
@@ -43,9 +44,11 @@ function Navbar() {
       <div className="container-fluid">
         {/* <!-- Navbar brand --> */}
         <span className="ip" >IP : {ipAddress} <img src={countryFlag} alt="Country Flag" style={{ width: '30px', height: '20px', marginBottom:'6px' }}/></span>
-    
         
+        <button className="custom-btn1 btn-3"><span>ABOUT THE MODEL</span></button>
+        <button className="custom-btn1 btn-3"><span><img src={imgURL} style={{height:'25px', width:'25px'}}/> PROFILE</span></button>
       </div>
+      
       {/* <!-- Container wrapper --> */}
     </nav>
 
@@ -53,3 +56,4 @@ function Navbar() {
 }
 
 export default Navbar;
+
