@@ -21,7 +21,7 @@ nav{
   min-width: 160px;
   min-height: 50px;
   color: #fff;
-  
+  margin: 30px;
   padding: 10px 25px;
   font-family: Kode mono;
   font-size: 0.8rem;
@@ -38,7 +38,6 @@ nav{
 
 .btn-3 {
   background: rgb(10, 10, 59);
-  
   width: 130px;
   height: 40px;
   line-height: 42px;
@@ -49,9 +48,11 @@ nav{
 .btn-3 span {
   position: relative;
   display: block;
-  margin-top:5px;
+  margin-top: 5px;
   width: 100%;
   height: 100%;
+  text-align: center;
+
 }
 .btn-3:before,
 .btn-3:after {
@@ -114,3 +115,7 @@ nav{
   display: flex;
   
 }
+Link {
+  position: fixed;
+
+ }

@@ -1,8 +1,7 @@
 import React from "react";
 import Navbar from "./Navbar.jsx";
 import Content from "./Content.jsx";
-import Footer from "./footer.jsx";
-
+import Footer from "./footer";
 
 
 function Home() {
