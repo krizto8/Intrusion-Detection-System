@@ -39,29 +39,26 @@ function Navbar() {
   }, []);
 
   return (
-
     <nav className="navbar navbar-expand-lg navbar-dark shadow-5-strong">
-      {/* <!-- Container wrapper --> */}
       <div className="container-fluid">
-        {/* <!-- Navbar brand --> */}
-        <span className="ip" >IP : {ipAddress} <img src={countryFlag} alt="Country Flag" style={{ width: '30px', height: '20px', marginBottom:'6px' }}/></span>
+        <span className="ip">IP : {ipAddress} <img src={countryFlag} alt="Country Flag" style={{ width: '30px', height: '20px', marginBottom:'6px' }}/></span>
         <div className="buttons">
-          
-          <Link to="/model" as ="button" className="custom-btn1 btn-3"><span>ABOUT THE MODEL</span></Link>
-          <Link to="/attacks" as ="button" className="custom-btn1 btn-3"><span>TYPES OF ATTACKS</span></Link>
-          <Link to="/logout" as ="button" className="custom-btn1 btn-3"><span><img src={imgURL} style={{height:'25px', width:'25px'}}/> LOG OUT</span></Link>
-          
+          <Link to="/model" as="button" className="custom-btn1 btn-3"><span>ABOUT THE MODEL</span></Link>
+          <div className="dropdown">
+            <Link to="/attacks" as="button" className="custom-btn1 btn-3"><span>TYPES OF ATTACKS</span></Link>
+            <div className="dropdown-content">
+              <Link to="/attacks/botnet">Botnet</Link>
+              <Link to="/attacks/bruteforce">Bruteforce</Link>
+              <Link to="/attacks/ddos">DDoS</Link>
+              <Link to="/attacks/dos">DoS</Link>
+              <Link to="/attacks/infiltration">Infiltration</Link>
+            </div>
+          </div>
+          <Link to="/logout" as="button" className="custom-btn1 btn-3"><span><img src={imgURL} style={{height:'25px', width:'25px'}}/> LOG OUT</span></Link>
         </div>
-        
       </div>
-
-      
-      
-      {/* <!-- Container wrapper --> */}
     </nav>
-
   );
 }
-
 export default Navbar;
 

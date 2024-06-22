@@ -1,5 +1,5 @@
 import React from "react";
-import "./Botnet.css";
+import "./AttacksData.css";
 import Navbar from "./Navbar";
 
 function Botnet() {
