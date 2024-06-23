@@ -11,9 +11,9 @@ function Content(){
             </div>
             <div className="box right">
                 
-                <button class="custom-btn btn">Start Live Data Capture</button>
-                <button class="custom-btn btn">Enter own data values</button>
-                <button class="custom-btn btn">view logs</button>
+                <Link to="/capture" as="button" className="custom-btn btn"><span className="text">Start Live Data Capture</span></Link>
+                <Link to="/data" as="button" className="custom-btn btn"><span className="text">Enter own data values</span></Link>
+                <Link to="/logs" as="button" className="custom-btn btn"><span className="text">view logs</span></Link>
             </div>
         </div>
         {/* <Routes>

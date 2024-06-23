@@ -46,7 +46,7 @@ button {
   .custom-btn {
     width: 160px;
     height: 80px;
-    
+    margin: 20px;
     border-radius: 5px;
     padding: 10px 25px;
 
@@ -64,6 +64,9 @@ button {
 .btn {
     border: none;
     color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .btn:after {
     position: absolute;
@@ -93,5 +96,3 @@ button {
     top: 2px;
   }
 
-
-  
