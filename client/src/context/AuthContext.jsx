@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
 
   const authenticate = () => {
     setIsAuthenticated(true);
-    localStorage.setItem('token', data.token);
+    
     // You might want to set the token here as well if it's not set in the login component
     // localStorage.setItem('token', 'your-token-here');
   };
