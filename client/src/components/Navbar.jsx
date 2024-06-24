@@ -1,11 +1,14 @@
 import React, {useEffect, useState } from "react";
 import "./Navbar.css";
 import imgURL from "../assets/profile.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from '../context/AuthContext';
 
 function Navbar() {
   const [ipAddress, setIpAddress] = useState('');
   const [countryFlag, setCountryFlag] = useState('');
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Function to fetch IP address
@@ -38,6 +41,11 @@ function Navbar() {
     fetchIpAddress();
   }, []);
 
+  const handleLogout = () => {
+    logout(); 
+    navigate('/login');
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark shadow-5-strong">
       <div className="container-fluid">
@@ -45,7 +53,7 @@ function Navbar() {
         <div className="buttons">
           <Link to="/model" as="button" className="custom-btn1 btn-3"><span>ABOUT THE MODEL</span></Link>
           <div className="dropdown">
-            <Link to="/attacks" as="button" className="custom-btn1 btn-3"><span>TYPES OF ATTACKS</span></Link>
+            <Link to="" as="button" className="custom-btn1 btn-3"><span>TYPES OF ATTACKS</span></Link>
             <div className="dropdown-content">
               <Link to="/attacks/botnet">Botnet</Link>
               <Link to="/attacks/bruteforce">Bruteforce</Link>
@@ -54,7 +62,7 @@ function Navbar() {
               <Link to="/attacks/infiltration">Infiltration</Link>
             </div>
           </div>
-          <Link to="/logout" as="button" className="custom-btn1 btn-3"><span><img src={imgURL} style={{height:'25px', width:'25px'}}/> LOG OUT</span></Link>
+          <button onClick={handleLogout} id="logout" className="custom-btn1 btn-3"><span><img src={imgURL} style={{height:'25px', width:'25px'}}/> LOG OUT</span></button>
         </div>
       </div>
     </nav>

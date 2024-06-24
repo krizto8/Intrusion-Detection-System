@@ -1,7 +1,8 @@
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { register } from '../services/auService.js';
+import { useAuth } from '../context/AuthContext.jsx';
 import './SignIn.css'; // Import the CSS file
 
 function SignUp(){
@@ -9,6 +10,9 @@ function SignUp(){
     email: '',
     password: '',
   });
+
+  const { authenticate } = useAuth();
+  const navigate = useNavigate();
 
   const { email, password } = formData;
 
@@ -21,7 +25,8 @@ function SignUp(){
     try {
       await register(formData);
       console.log("success");
-      window.location.href = 'http://localhost:5173/home';
+      authenticate();
+      navigate('/home');
     } catch (err) {
       console.log(err.response);
       alert(err.response.data.msg);

@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../services/auService.js';
+import { useAuth } from '../context/AuthContext.jsx';
 import './SignIn.css'; // Import the existing Signup.css for styling
 
 const Login = () => {
+    
     const [formData, setFormData] = useState({
         email: '',
         password: '',
     });
+
+    const { authenticate } = useAuth();
+    const navigate = useNavigate();
 
     const { email, password } = formData;
 
@@ -20,7 +25,8 @@ const Login = () => {
         try {
             const data = await login(formData);
             localStorage.setItem('token', data.token);
-            window.location.href = 'http://localhost:5173/home';
+            authenticate();
+            navigate('/home');
         } catch (err) {
             alert(err.response.data.msg);
         }
