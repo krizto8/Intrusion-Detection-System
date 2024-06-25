@@ -8,21 +8,32 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (token) {
-      setIsAuthenticated(true);
+    const expirationTime = localStorage.getItem('tokenExpiration');
+    
+    if (token && expirationTime) {
+      const currentTime = new Date().getTime();
+      if (currentTime < parseInt(expirationTime)) {
+        setIsAuthenticated(true);
+      } else {
+        // Token has expired, remove it
+        localStorage.removeItem('token');
+        localStorage.removeItem('tokenExpiration');
+      }
     }
   }, []);
 
   const authenticate = () => {
     setIsAuthenticated(true);
-    
-    // You might want to set the token here as well if it's not set in the login component
-    // localStorage.setItem('token', 'your-token-here');
+    const token = 'your-generated-token-here'; // Replace with actual token generation
+    const expirationTime = new Date().getTime() + 7 * 24 * 60 * 60 * 1000; // 7 days from now
+    localStorage.setItem('token', token);
+    localStorage.setItem('tokenExpiration', expirationTime.toString());
   };
 
   const logout = () => {
     setIsAuthenticated(false);
     localStorage.removeItem('token');
+    localStorage.removeItem('tokenExpiration');
   };
 
   return (
