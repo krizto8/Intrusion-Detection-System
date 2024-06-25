@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, useLocation} from 'react-router-dom';
 import Home from "./components/Home";
 import VideoBg from "./assets/net4.mp4";
 import Botnet from './components/Botnet';
@@ -16,12 +16,27 @@ import "./App.css";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
-  return isAuthenticated ? children : <Navigate to="/login" />;
+  const location = useLocation();
+
+  if (!isAuthenticated) {
+    // Save the current location to state
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return children;
 };
 
 const UnauthenticatedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
-  return isAuthenticated ? <Navigate to="/home" /> : children;
+  const location = useLocation();
+
+  if (isAuthenticated) {
+    // Redirect to the saved location or home if there's no saved location
+    const from = location.state?.from?.pathname || "/home";
+    return <Navigate to={from} replace />;
+  }
+
+  return children;
 };
 
 function App() {
