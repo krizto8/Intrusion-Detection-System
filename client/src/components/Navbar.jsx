@@ -28,7 +28,6 @@ function Navbar() {
       try {
         const response = await fetch(`https://restcountries.com/v3.1/alpha/${countryCode}`);
         const data = await response.json();
-        console.log(data[0].flags);
         if (data[0].flags.svg) {
           setCountryFlag(data[0].flags.svg); // Set country flag URL
         }

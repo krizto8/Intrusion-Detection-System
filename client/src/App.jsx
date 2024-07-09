@@ -10,13 +10,18 @@ import Infiltration from './components/Infiltration';
 import ChartComponent from './components/ChartComponent';
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
+import Detail from "./components/Detail";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 
 import "./App.css";
 
+
+
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
+  
   const location = useLocation();
+  console.log(location);
 
   if (!isAuthenticated) {
     // Save the current location to state
@@ -32,19 +37,22 @@ const UnauthenticatedRoute = ({ children }) => {
 
   if (isAuthenticated) {
     // Redirect to the saved location or home if there's no saved location
-    const from = location.state?.from?.pathname || "/home";
+    const from = location.state?.from?.path || '/home';
     return <Navigate to={from} replace />;
   }
+  
 
   return children;
 };
 
 function App() {
+
   return (
     <AuthProvider>
+      
       <div>
         <div id="background">
-          <video src={VideoBg} autoPlay muted loop id="background-video" style={{opacity:'20%'}} />
+          <video src={VideoBg} autoPlay muted loop id="background-video" style={{opacity:'17%'}} />
         </div>
       </div>
       
@@ -62,8 +70,10 @@ function App() {
           <Route path="/capture" element={<ProtectedRoute><ChartComponent /></ProtectedRoute>} />
           <Route path="/data" element={<ProtectedRoute><DoS /></ProtectedRoute>} />
           <Route path="/logs" element={<ProtectedRoute><Infiltration /></ProtectedRoute>} />
+          <Route path="/flow-detail/:flowId" element={<ProtectedRoute><Detail /></ProtectedRoute>} />
         </Routes>
       </Router>
+      
     </AuthProvider>
   );
 }

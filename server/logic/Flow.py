@@ -1,6 +1,6 @@
 import statistics
 
-from flow.FlowFeature import FlowFeatures
+from FlowFeature import FlowFeatures
 
 from datetime import datetime
 threshold = 5
