@@ -5,11 +5,12 @@ import { Chart, Bar } from 'react-chartjs-2';
 import 'chart.js/auto';  // Necessary for chart.js v3
 import "./table.css"; 
 import Navbar from './Navbar';
-// import "../../public/static/css/icons.css";
+
 
 
 
 const MyComponent = () => {
+    const [shouldBlink, setShouldBlink] = useState(false);
     const [messagesReceived, setMessagesReceived] = useState([]);
     const [chartData, setChartData] = useState({
         labels: [],
@@ -33,8 +34,9 @@ const MyComponent = () => {
         // Receive details from the server
         socket.on('newresult', (msg) => {
             console.log("Received result: ", msg.result);
+            console.log(msg.result[12].level);
 
-            // Maintain a list of ten messages
+            // Maintain a list of twenty messages
             setMessagesReceived(prevMessages => {
                 const updatedMessages = [...prevMessages, msg.result];
                 if (updatedMessages.length > 20) {
@@ -42,6 +44,12 @@ const MyComponent = () => {
                 }
                 return updatedMessages;
             });
+
+            if (msg.result[10] != "Benign") {
+                setShouldBlink(true);
+              } else {
+                setShouldBlink(false);
+              }
 
             // Update chart data
             const newLabels = msg.ips.map(ipData => ipData.SourceIP);
@@ -85,7 +93,10 @@ const MyComponent = () => {
 
     return (
       <>
+      {console.log(shouldBlink)}
+      
       <Navbar />
+      <div className={shouldBlink ? 'blinking-background' : ''}>
         <div className='main-heading'>
             <h1>Live Traffic</h1>
             <div className="chart" style={{ display: "flex", justifyContent: "center", alignItems: "center", height: '60vh' }}>
@@ -112,10 +123,11 @@ const MyComponent = () => {
                     </thead>
                     <tbody>
                         {messagesReceived.map((message, index) => (
+                            
                             <tr key={index}>
                                 {message.slice(0, -1).map((item, subIndex) => (
                                   
-                                    <td key={subIndex}>{subIndex == 1 || subIndex == 3 ? (<>{item.ip}<img src={item.img.src} className={item.img.class} title={item.img.title}/></>) :( item.toString())}</td>
+                                    <td key={subIndex}>{subIndex == 1 || subIndex == 3 ? (item.ip) :( item.toString())}</td>
                                 ))}
                                 <td style={{ color: message[message.length - 1].color }}>{message[message.length - 1].level}</td>
                                 <td>
@@ -128,6 +140,7 @@ const MyComponent = () => {
                     </tbody>
                 </table>
             </div>
+        </div>
         </div>
         </>
     );

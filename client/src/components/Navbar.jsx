@@ -1,6 +1,7 @@
 import React, {useEffect, useState } from "react";
 import "./Navbar.css";
 import imgURL from "../assets/profile.png";
+import homeURL from "../assets/favicon.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from '../context/AuthContext';
 
@@ -48,8 +49,9 @@ function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark shadow-5-strong">
       <div className="container-fluid">
-        <span className="ip">IP : {ipAddress} <img src={countryFlag} alt="Country Flag" style={{ width: '30px', height: '20px', marginBottom:'6px' }}/></span>
+        <span className="ip">IP : {ipAddress} <img src={countryFlag} style={{ width: '30px', height: '20px', marginBottom:'6px' }}/></span>
         <div className="buttons">
+          <Link to="/home"><img src={homeURL} style={{ width: '55px', height: '45px', marginTop:'32px', marginRight:"35px"}}/></Link>
           <Link to="/model" as="button" className="custom-btn1 btn-3"><span>ABOUT THE MODEL</span></Link>
           <div className="dropdown">
             <Link to="" as="button" className="custom-btn1 btn-3"><span>TYPES OF ATTACKS</span></Link>

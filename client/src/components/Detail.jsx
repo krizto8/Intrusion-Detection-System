@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
 import Plot from 'react-plotly.js';
-import imgURL from "./gears-spinner.svg"
+import imgURL from "../assets/gears-spinner.svg"
 import "./Detail.css";
 import Navbar from "./Navbar";
 

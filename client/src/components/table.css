@@ -43,3 +43,21 @@
     font-weight: 700;
     border: 2px solid black; /* Adjust header background color */
 }
+
+/* styles.css */
+@keyframes blink {
+    0% {
+      background-color: #ff0000;
+    }
+    50% {
+      background-color: #ffffff;
+    }
+    100% {
+      background-color: #ff0000;
+    }
+  }
+  
+  .blinking-background {
+    animation: blink 1s 10;
+  }
+  

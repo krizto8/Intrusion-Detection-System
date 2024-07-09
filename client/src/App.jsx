@@ -12,6 +12,7 @@ import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import Detail from "./components/Detail";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import Model from "./components/Model";
 
 import "./App.css";
 
@@ -70,6 +71,7 @@ function App() {
           <Route path="/capture" element={<ProtectedRoute><ChartComponent /></ProtectedRoute>} />
           <Route path="/data" element={<ProtectedRoute><DoS /></ProtectedRoute>} />
           <Route path="/logs" element={<ProtectedRoute><Infiltration /></ProtectedRoute>} />
+          <Route path="/model" element={<ProtectedRoute><Model /></ProtectedRoute>} />
           <Route path="/flow-detail/:flowId" element={<ProtectedRoute><Detail /></ProtectedRoute>} />
         </Routes>
       </Router>
