@@ -71,12 +71,6 @@ socketio = SocketIO(app, async_mode=None, logger=True, engineio_logger=True,cors
 thread = Thread()
 thread_stop_event = Event()
 
-f = open("output_logs.csv", 'w')
-w = csv.writer(f)
-f2 = open("input_logs.csv", 'w')
-w2 = csv.writer(f2)
- 
-
 cols = ['FlowID',
 'FlowDuration',
 'BwdPacketLenMax',
@@ -210,28 +204,7 @@ def classify(features):
 
     for i in [0,2]:
         ip = feature_string[i] #feature_string[0] is src, [2] is dst
-        if not ipaddress.ip_address(ip).is_private:
-            country = ipInfo(ip)
-            if country is not None and country not in  ['ano', 'unknown']:
-                img = {
-                    'src': '/static/images/blank.gif',
-                    'class': 'flag flag-' + country.lower(),
-                    'title': country
-                }
-            else:
-                img = {
-                    'src': '/static/images/blank.gif',
-                    'class': 'flag flag-unknown',
-                    'title': 'UNKNOWN'
-                }
-        else:
-            img = {
-                'src': '/static/images/lan.gif',
-                'height': '11px',
-                'style': 'margin-bottom: 0px',
-                'title': 'LAN'
-            }
-        feature_string[i] = {'ip': ip, 'img': img}
+        feature_string[i] = {'ip': ip}
 
     if np.nan in features:
         return
@@ -255,15 +228,6 @@ def classify(features):
         print(feature_string + classification + proba_score )
 
     flow_count +=1
-    w.writerow(['Flow #'+str(flow_count)] )
-    w.writerow(['Flow info:']+feature_string)
-    w.writerow(['Flow features:']+features)
-    w.writerow(['Prediction:']+classification+ proba_score)
-    w.writerow(['--------------------------------------------------------------------------------------------------'])
-
-    w2.writerow(['Flow #'+str(flow_count)] )
-    w2.writerow(['Flow info:']+features)
-    w2.writerow(['--------------------------------------------------------------------------------------------------'])
     flow_df.loc[len(flow_df)] = [flow_count]+ record + classification + proba_score + [risk]
 
 
@@ -278,7 +242,7 @@ def classify(features):
 
     socketio.emit('newresult', {'result':[flow_count]+ feature_string + classification + proba_score + [risk], "ips": json.loads(ip_data)}, namespace='/test')
     # socketio.emit('newresult', {'result': feature_string + classification}, namespace='/test')
-    return [flow_count]+ record + classification+ proba_score + [risk]
+    return [flow_count]+ record + classification + proba_score + [risk]
 
 def newPacket(p):
     try:
@@ -365,6 +329,7 @@ def snif_and_detect():
         print("Begin Sniffing".center(20, ' '))
         sniff(prn=newPacket)
         for f in current_flows.values():
+            print(f.terminated())
             classify(f.terminated())
 
 
@@ -380,10 +345,11 @@ def flow_detail():
     flow = flow_df.loc[flow_df['FlowID'] == flow_id]
     # X = normalisation.transform([flow.values[0,1:40]])
     X = [flow.values[0,1:40]] #retrieves all the values of the flow (returned by the flow object) (a row in the table if u will)
-    print("\nX: ",X)  
+    print("\nX: ", X)  
     
-
+    
     choosen_instance = X
+    result = classifier.predict(choosen_instance)
     proba_score = list(predict_fn_rf(choosen_instance))
     print(proba_score)
     risk_proba =  sum(proba_score[0][1:])
@@ -422,10 +388,68 @@ def flow_detail():
         "flow": flow.reset_index(drop=True).transpose().to_dict(),
         "plot_data":plot_data,
         "exp": explanation_details,
-        "risk" : risk
+        "risk" : risk,
+        "result": result.tolist()[0]
     }
 
     return result
+
+
+@app.route("/api/submit-features", methods = ['POST'])
+def submit_features():
+    data = request.get_json()
+
+    flow = flow_df.loc[flow_df['FlowID'] == 0]
+
+    data = list(data.values())
+    np_data = np.array(data)
+    np_data = np_data.reshape(1, -1)
+    result = classifier.predict([data])  
+    proba = predict_fn_rf([data])   
+    proba_risk = sum(list(proba[0,1:]))
+    if proba_risk >0.8: risk = {"level": "Very High", "color": "red"}
+    elif proba_risk >0.6: risk = {"level": "High", "color": "orangered"}
+    if proba_risk >0.4: risk = {"level": "Medium", "color": "orange"}
+    if proba_risk >0.2: risk = {"level": "Low", "color": "green"}
+    else: risk = {"level": "Minimal", "color": "limegreen"}
+    # response_data = [result.tolist()[0], proba_score[0], risk]
+    # return jsonify(response_data)
+    exp = explainer.explain_instance(np_data[0], predict_fn_rf, num_features=6, top_labels = 1)
+    explanation_details = {
+        "class_names": exp.__dict__.get("class_names"),
+        "predict_proba": exp.__dict__.get("predict_proba").tolist() 
+    }
+
+    data_transformed = ae_scaler.transform(np_data)
+    print("\nX_transformed", data_transformed)
+
+    reconstruct = ae_model.predict(data_transformed)
+    print("\nreconstruct", reconstruct)
+    err = reconstruct - data_transformed
+    abs_err = np.absolute(err)
+
+    ind_n_abs_largest = np.argpartition(abs_err, -5)[-5:]
+    print("\nind_n_abs_largest", ind_n_abs_largest)
+
+    col_n_largest = ae_features[ind_n_abs_largest]
+    # og_n_largest = X[ind_n_abs_largest]
+    err_n_largest = err[0][ind_n_abs_largest]
+    plot_data = {
+        "x": col_n_largest.tolist(),
+        "y": err_n_largest.tolist()
+    }
+    # return render_template('detail.html', tables=[flow.reset_index(drop=True).transpose().to_html(classes='data')], exp=exp.as_html(), ae_plot = plot_div, risk = risk) # titles=flow.columns.values, classifier='RF Classifier'
+
+    result_data = {
+        "flow": flow.reset_index(drop=True).transpose().to_dict(),
+        "plot_data":plot_data,
+        "exp": explanation_details,
+        "risk" : risk,
+        "classification":result.tolist()[0]
+    }
+
+    return result_data
+
 
 
 
